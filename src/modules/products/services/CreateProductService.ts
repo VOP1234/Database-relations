@@ -13,7 +13,7 @@ interface IRequest {
 
 @injectable()
 class CreateProductService {
-  constructor(private productsRepository: IProductsRepository) {}
+  constructor(private productsRepository: IProductsRepository) { }
 
   public async execute({ name, price, quantity }: IRequest): Promise<Product> {
     // TODO
