@@ -9,14 +9,13 @@ export default class CustomersController {
     // TODO
     const { name, email } = request.body
 
-    const createUser = container.resolve(CreateUserService)
+    const createCustomer = container.resolve(CreateCustomerService)
 
-    const user = await createUser.execute({
+    const user = await createCustomer.execute({
       name,
       email,
-      password
     })
 
-    return response.json(classToClass(user))
+    return response.json(user)
   }
 }
