@@ -7,6 +7,7 @@ import Product from '../entities/Product';
 
 interface IFindProducts {
   id: string;
+  quantity: number
 }
 
 class ProductsRepository implements IProductsRepository {
@@ -44,12 +45,23 @@ class ProductsRepository implements IProductsRepository {
     return findProduct;
   }
 
-  public async findAllById(products: IFindProducts[]): Promise<Product | undefined> {
+  public async findAllById(products: IFindProducts[]): Promise<Product[] | undefined> {
     // TODO
-    const [id] = products
-    const findProduct = await this.ormRepository.findOne(id);
+    console.log("Entrei no  findAllById -> ")
 
-    return findProduct;
+    let selectedProducts: Product[] = []
+
+    const allProducts = await this.ormRepository.find();
+
+    allProducts.map(allProduct => {
+      products.map(product => {
+        if (allProduct.id === product.id) {
+          selectedProducts.push(allProduct)
+        }
+      })
+    })
+
+    return selectedProducts;
   }
 
   public async updateQuantity(

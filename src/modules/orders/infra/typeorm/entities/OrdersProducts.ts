@@ -28,7 +28,7 @@ class OrdersProducts {
 
   @ManyToOne(() => Product)
   @JoinColumn({ name: 'product_id' })
-  product: Product;
+  product: Product[];
 
   @Column()
   price: number;

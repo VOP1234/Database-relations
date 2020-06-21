@@ -27,8 +27,8 @@ class CreateProductService {
     }
 
     const product = await this.productsRepository.create({
-      name, 
-      price, 
+      name,
+      price,
       quantity
     })
 
