@@ -37,17 +37,34 @@ class CreateOrderService {
     if (!customer) {
       throw new AppError('Customer not find.')
     }
-    console.log('execute -> ',products)
-    const allProduct = this.productsRepository.findAllById(products)
 
+    const productsIds = products.map(product => {
+      return { id: product.id }
+    })
 
-    if (!allProduct) {
+    const productsData = await this.productsRepository.findAllById(productsIds)
+
+    if (!productsData) {
       throw new AppError('Products not find.')
     }
 
+    const productsSelected = productsData.map(productData => {
+      const productsSelected = products.find(
+        productFind => productFind.id === productData.id,
+      )
+
+      return {
+        product_id: productData.id,
+        price: productData.price,
+        quantity: productsSelected?.quantity || 0,
+      }
+    })
+
+    await this.productsRepository.updateQuantity(products)
+
     const order = await this.ordersRepository.create({
       customer,
-      products
+      products: productsSelected
     })
 
     return order

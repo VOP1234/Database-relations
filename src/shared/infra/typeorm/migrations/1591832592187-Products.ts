@@ -18,19 +18,16 @@ export class Products1591832592187 implements MigrationInterface {
           {
             name: 'name',
             type: 'varchar',
-            isNullable: false,
           },
           {
             name: 'price',
-            type: 'decimal',
+            type: 'numeric',
             precision: 10,
             scale: 2,
-            isNullable: false
           },
           {
             name: 'quantity',
-            type: 'int',
-            isNullable: false
+            type: 'integer',
           },
           {
             name: 'created_at',

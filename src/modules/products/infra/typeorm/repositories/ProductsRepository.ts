@@ -4,6 +4,7 @@ import IProductsRepository from '@modules/products/repositories/IProductsReposit
 import ICreateProductDTO from '@modules/products/dtos/ICreateProductDTO';
 import IUpdateProductsQuantityDTO from '@modules/products/dtos/IUpdateProductsQuantityDTO';
 import Product from '../entities/Product';
+import AppError from '@shared/errors/AppError';
 
 interface IFindProducts {
   id: string;
@@ -47,39 +48,47 @@ class ProductsRepository implements IProductsRepository {
 
   public async findAllById(products: IFindProducts[]): Promise<Product[] | undefined> {
     // TODO
-    console.log("Entrei no  findAllById -> ")
+    const idList = products.map(product => product.id)
+    const orderList = await this.ormRepository.find({ id: In(idList) })
 
-    let selectedProducts: Product[] = []
+    if (idList.length !== orderList.length) {
+      throw new AppError('Missing product.')
+    }
 
-    const allProducts = await this.ormRepository.find();
-
-    allProducts.map(allProduct => {
-      products.map(product => {
-        if (allProduct.id === product.id) {
-          selectedProducts.push(allProduct)
-        }
-      })
-    })
-
-    return selectedProducts;
+    return orderList;
   }
 
   public async updateQuantity(
     products: IUpdateProductsQuantityDTO[],
   ): Promise<Product[]> {
     // TODO
-    const [quantity] = products
+    const idList = products.map(product => product.id)
+    const productLists = await this.ormRepository.find({ id: In(idList) })
 
-    const newProduct = {
-      ...products,
-      quantity
+    if (!productLists) {
+      throw new AppError('Product not found.')
     }
 
-    const product = this.ormRepository.create(newProduct);
+    productLists.map(productList => {
+      products.map(product => {
+        if (product.id === productList.id) {
+          if (productList.quantity < product.quantity) {
+            throw new AppError('There is no enoght product.')
+          } else {
+            const newQuantity = productList.quantity - product.quantity
 
-    await this.ormRepository.save(product);
+            this.ormRepository.update(productList.id, {
+              quantity: newQuantity
+            })
+          }
+        }
+      })
+    })
 
-    return product;
+
+
+    return productLists;
+
   }
 }
 

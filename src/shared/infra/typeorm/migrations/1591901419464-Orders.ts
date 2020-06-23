@@ -17,7 +17,6 @@ export class Orders1591901419464 implements MigrationInterface {
           {
             name: 'customer_id',
             type: 'uuid',
-            isNullable: false,
           },
           {
             name: 'created_at',
@@ -36,18 +35,18 @@ export class Orders1591901419464 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'orders',
       new TableForeignKey({
-        name: 'Orders',
+        name: 'OrdersTableForeignKey',
         columnNames: ['customer_id'],
-        referencedColumnNames: ['id'],
         referencedTableName: 'customers',
-        onDelete: 'SET NULL',
+        referencedColumnNames: ['id'],
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       })
     )
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
-    await queryRunner.dropForeignKey('orders', 'Orders')
+    await queryRunner.dropForeignKey('orders', 'OrdersTableForeignKey')
 
     await queryRunner.dropTable('order');
   }

@@ -18,23 +18,20 @@ export class OrdersProducts1591901435452 implements MigrationInterface {
           {
             name: 'product_id',
             type: 'uuid',
-            isNullable: true,
           },
           {
             name: 'order_id',
             type: 'uuid',
-            isNullable: true,
-          }, {
+          },
+          {
             name: 'price',
-            type: 'decimal',
+            type: 'numeric',
             precision: 10,
             scale: 2,
-            isNullable: false
           },
           {
             name: 'quantity',
-            type: 'int',
-            isNullable: false
+            type: 'integer',
           },
           {
             name: 'created_at',
@@ -57,7 +54,7 @@ export class OrdersProducts1591901435452 implements MigrationInterface {
         columnNames: ['product_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'products',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       })
     )
@@ -69,7 +66,7 @@ export class OrdersProducts1591901435452 implements MigrationInterface {
         columnNames: ['order_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'orders',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       })
     )
